@@ -5,83 +5,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat com GerhAI</title>
-    <link rel="icon" type="image/png" href="{{ url_for('static', path='favicon.png') }}">
+    <link rel="icon" type="image/png" href="/static/favicon.png">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                     },
-                    css: {
-                        '.message-text': {
-                            color: '#1f2937',
-                            lineHeight: '1.625',
-                            minHeight: '1.5em', /* Garante que haja espaço para o cursor */
-                        },
-                        '.typing-cursor': {
-                            display: 'inline-block',
-                            animation: 'blink 1s infinite',
-                            color: '#6b7280',
-                            fontWeight: 'bold',
-                        },
-                        '@keyframes blink': {
-                            '0%, 100%': { opacity: 1 },
-                            '50%': { opacity: 0 },
-                        },
-                        '.copy-button': {
-                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                            transition: 'background-color 0.2s',
-                        },
-                        '.copy-button:hover': {
-                            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    colors: {
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
                         },
                     },
                 },
             },
+            plugins: [
+                function({ addComponents }) {
+                    addComponents({
+                        '.btn': {
+                            '@apply px-4 py-2 rounded-lg font-medium transition-colors duration-200': {},
+                        },
+                        '.btn-primary': {
+                            '@apply bg-primary-600 text-white hover:bg-primary-700': {},
+                        },
+                    });
+                },
+            ],
         }
     </script>
+    
+    <!-- Marked.js para renderização de markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body class="h-full">
-    <div id="app">
-        <header class="bg-white border-b border-gray-200 py-4 px-6">
-            <h1 class="text-xl font-semibold text-gray-800">Chat com GerhAI</h1>
+<body class="h-full bg-gray-50 dark:bg-gray-900">
+    <div id="app" class="h-full flex flex-col">
+        <!-- Cabeçalho -->
+        <header class="bg-white dark:bg-gray-800 shadow-sm z-10">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <img src="/static/favicon.png" alt="Logo" class="h-8 w-8 mr-2">
+                        <h1 class="text-xl font-bold text-gray-900 dark:text-white">GerhAI</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button id="theme-toggle" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg">
+                            <i class="fas fa-moon dark:hidden"></i>
+                            <i class="fas fa-sun hidden dark:block"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </header>
         
-        <div id="chat-container" class="chat-container">
-            <div id="chat-messages" class="space-y-1">
+        <!-- Área de mensagens -->
+        <div id="chat-container" class="flex-1 overflow-y-auto">
+            <div id="chat-messages" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 space-y-4">
+                <!-- Mensagens serão inseridas aqui via JavaScript -->
             </div>
         </div>
         
-        <div class="input-container">
-            <div class="input-wrapper">
-                <div class="flex-1 relative">
-                    <textarea 
-                        id="user-input" 
-                        placeholder="Envie uma mensagem..." 
-                        rows="1"
-                        oninput="autoResize(this)"
-                        onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); }"
-                        class="w-full">
-                    </textarea>
-                </div>
-                <button 
-                    id="send-button"
-                    onclick="sendMessage()"
-                    class="send-button"
-                    title="Enviar mensagem"
-                >
-                    <i class="fas fa-paper-plane"></i>
-                </button>
+        <!-- Área de entrada de mensagem -->
+        <div class="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 py-4 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+            <div class="max-w-4xl mx-auto">
+                <form id="chat-form" class="flex items-end gap-2">
+                    <div class="flex-1 relative">
+                        <textarea 
+                            id="user-input" 
+                            rows="1"
+                            placeholder="Digite sua mensagem..." 
+                            class="w-full px-4 py-3 pr-12 text-gray-900 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white transition-colors duration-200"
+                            oninput="autoResize(this)"
+                            onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); }"
+                        ></textarea>
+                        <button 
+                            type="button"
+                            class="absolute right-2 bottom-2 p-2 text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors duration-200"
+                            onclick="document.getElementById('user-input').value = ''; autoResize(document.getElementById('user-input'));"
+                        >
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <button 
+                        id="send-button"
+                        type="submit"
+                        class="flex-shrink-0 inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary-600 hover:bg-primary-700 text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200 dark:bg-primary-700 dark:hover:bg-primary-600"
+                        title="Enviar mensagem"
+                    >
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+                <p class="mt-2 text-xs text-center text-gray-500 dark:text-gray-400 transition-colors duration-200">
+                    GerhAI pode gerar respostas imprecisas. Verifique as informações importantes.
+                </p>
             </div>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="/static/script.js"></script>
 </body>
 </html>
