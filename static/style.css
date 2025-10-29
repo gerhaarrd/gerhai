@@ -1,58 +1,550 @@
+/* Reset e estilos globais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Cores do tema claro */
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --bg-color: #ffffff; /* Fundo mais branco */
+    --card-bg: #f8fafc;  /* Fundo dos cards mais suave */
+    --text-primary: #1e293b; /* Texto principal mais escuro */
+    --text-secondary: #475569; /* Texto secundário com melhor contraste */
+    --border-color: #e2e8f0;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 1rem;
+    --transition: all 0.2s ease-in-out;
+    
+    /* Cores para o tema escuro - Contraste aprimorado */
+    --dark-bg-color: #0f172a; /* Fundo mais escuro */
+    --dark-card-bg: #1e293b;   /* Cards mais escuros */
+    --dark-text-primary: #f8fafc; /* Texto principal branco puro */
+    --dark-text-secondary: #e2e8f0; /* Texto secundário quase branco */
+    --dark-border-color: #334155; /* Bordas mais visíveis */
+    --dark-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --dark-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+    
+    /* Cores adicionais para melhor contraste */
+    --dark-user-message-bg: #1e40af; /* Azul mais escuro para mensagens do usuário */
+    --dark-bot-message-bg: #1e293b; /* Fundo mais escuro para mensagens do bot */
+    --dark-link-color: #60a5fa; /* Azul mais claro para links */
+    --dark-input-bg: #1e293b; /* Fundo mais escuro para inputs */
+    --dark-code-text: #f0f9ff; /* Cor do texto em blocos de código */
+}
+
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    height: 100vh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Estilos para o tema escuro */
+.dark, .dark body {
+    --bg-color: var(--dark-bg-color);
+    --card-bg: var(--dark-card-bg);
+    --text-primary: var(--dark-text-primary);
+    --text-secondary: var(--dark-text-secondary);
+    --border-color: var(--dark-border-color);
+    --shadow-sm: var(--dark-shadow-sm);
+    --shadow-md: var(--dark-shadow-md);
+    
+    /* Aplicar cores escuras em elementos específicos */
+    background-color: var(--dark-bg-color);
+    color: var(--dark-text-primary);
+}
+
+/* Estilo para o textarea */
+#user-input {
+    background-color: #ffffff;
+    color: #1f2937;
+    border: 1px solid #d1d5db;
+    transition: all 0.2s ease-in-out;
+}
+
+#user-input::placeholder {
+    color: #9ca3af;
+}
+
+#user-input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+/* Estilo para o textarea no tema escuro */
+.dark #user-input {
+    background-color: #1f2937;
+    color: #f3f4f6;
+    border-color: #4b5563;
+}
+
+.dark #user-input::placeholder {
+    color: #9ca3af;
+}
+
+.dark #user-input:focus {
+    border-color: #818cf8;
+    box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.3);
+    color: white;
+}
+
+.dark .send-button:hover {
+    background-color: #4338ca;
+}
+
+.dark .clear-button {
+    color: #9ca3af;
+}
+
+.dark .clear-button:hover {
+    color: #f3f4f6;
+    background-color: #374151;
+}
+
+/* Estilo para o cabeçalho */
+.dark header {
+    background-color: #111827;
+    border-bottom-color: #1f2937;
+}
+
+/* Estilo para a área de mensagens */
+.dark #chat-container {
+    background-color: var(--dark-bg-color);
+}
+
+/* Estilo para a área de entrada de mensagem */
+.chat-input-container {
+    background-color: white;
+    border-top: 1px solid #e5e7eb;
+    padding: 1rem;
+    transition: all 0.3s ease;
+}
+
+.dark .chat-input-container {
+    background-color: #111827;
+    border-top-color: #1f2937;
+}
+
+/* Estilo para o container do input */
+.chat-input-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+/* Estilo para o botão de limpar */
+.clear-button {
+    position: absolute;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    padding: 0.5rem;
+    color: #9ca3af;
+    background: none;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.clear-button:hover {
+    color: #6b7280;
+    background-color: #f3f4f6;
+}
+
+/* Ajuste para o botão de enviar */
+#send-button {
+    flex-shrink: 0;
+    height: 3rem;
+    width: 3rem;
+    border-radius: 9999px;
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#send-button:hover {
+    background-color: #4338ca;
+}
+
+.dark #send-button {
+    background-color: #6366f1;
+}
+
+.dark #send-button:hover {
+    background-color: #4f46e5;
+}
+
+/* Estilo para o texto do rodapé */
+.text-gray-500 {
+    color: #6b7280;
+    transition: color 0.3s ease;
+}
+
+.dark-mode .text-gray-500 {
+    color: #9ca3af;
+}
+
+/* Estilo do container da mensagem do rodapé */
+.footer-message {
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
     background-color: #f9fafb;
-    color: #111827;
-    height: 100%;
+    transition: all 0.3s ease;
+}
+
+/* Estilo do texto do rodapé */
+.footer-message p {
+    margin: 0;
+    color: #6b7280;
+}
+
+/* Estilo para o tema escuro */
+.dark-mode .footer-message {
+    background-color: #1f2937;
+    border: 1px solid #374151;
+}
+
+.dark-mode .footer-message p {
+    color: #d1d5db;
+}
+
+/* Garantir que o texto do rodapé mude de cor no tema escuro */
+.dark-mode footer p,
+.dark-mode .text-gray-500 {
+    color: #9ca3af;
+}
+
+/* Ajustes específicos para elementos no tema escuro */
+.dark-mode .message {
+    background-color: var(--dark-card-bg);
+    border-color: var(--dark-border-color);
+    color: var(--dark-text-primary);
+}
+
+.dark-mode .user-message {
+    background-color: var(--dark-user-message-bg);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .bot-message {
+    background-color: var(--dark-card-bg);
+    color: var(--dark-text-primary);
+    border: 1px solid var(--dark-border-color);
+}
+
+/* Melhorar contraste para texto em mensagens */
+.dark-mode .message-text {
+    color: #f3f4f6;
+}
+
+.dark-mode .message-time {
+    color: #9ca3af;
+}
+
+.dark-mode .typing-indicator span {
+    background-color: #94a3b8;
+}
+
+.dark-mode .message-text a {
+    color: var(--dark-link-color);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.dark-mode .message-text a:hover {
+    color: #93c5fd;
+    text-decoration: none;
+}
+
+.dark-mode .message-text code {
+    background-color: #1e293b;
+    color: var(--dark-code-text);
+    border: 1px solid #334155;
+    padding: 0.2em 0.4em;
+    border-radius: 0.25em;
+    font-size: 0.9em;
+    font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', monospace;
+}
+
+/* Melhorando a visibilidade dos blocos de código */
+.dark-mode pre {
+    background-color: #0f172a !important;
+    border: 1px solid #334155 !important;
+    border-radius: 0.375rem !important;
+    padding: 1rem !important;
+    overflow-x: auto !important;
+    color: var(--dark-code-text) !important;
+}
+
+/* Garantindo que todo o texto no tema escuro fique claro */
+.dark-mode,
+.dark-mode p,
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
+.dark-mode h6,
+.dark-mode div,
+.dark-mode span {
+    color: var(--dark-text-primary) !important;
+}
+
+/* Ajustando a cor do texto em elementos específicos */
+.dark-mode .message-content,
+.dark-mode .message-text {
+    color: var(--dark-text-primary) !important;
+}
+
+/* Ajustando a cor do texto em inputs e textareas */
+.dark-mode input,
+.dark-mode textarea {
+    color: var(--dark-text-primary) !important;
+}
+
+/* Ajustando a cor do texto em placeholders */
+.dark-mode ::placeholder {
+    color: #94a3b8 !important;
+    opacity: 1;
+}
+
+.dark-mode :-ms-input-placeholder {
+    color: #94a3b8 !important;
+}
+
+.dark-mode ::-ms-input-placeholder {
+    color: #94a3b8 !important;
+}
+
+/* Melhorando a visibilidade das barras de rolagem no tema escuro */
+.dark-mode ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.dark-mode ::-webkit-scrollbar-track {
+    background: #1f2937;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+    background: #4b5563;
+    border-radius: 4px;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+}
+
+.dark-mode .empty-state {
+    color: var(--dark-text-secondary) !important;
+}
+
+/* Garantindo que os ícones fiquem claros no tema escuro */
+.dark-mode i,
+.dark-mode svg {
+    color: var(--dark-text-secondary);
+}
+
+/* Ajustando a cor do texto em listas */
+.dark-mode ul,
+.dark-mode ol,
+.dark-mode li {
+    color: var(--dark-text-primary) !important;
+}
+
+/* Ajustando a cor do texto em citações */
+.dark-mode blockquote {
+    color: var(--dark-text-secondary) !important;
+    border-left-color: var(--dark-border-color) !important;
+}
+
+.dark-mode input,
+.dark-mode textarea {
+    background-color: var(--dark-input-bg);
+    color: #f9fafb;
+    border-color: var(--dark-border-color);
+}
+
+.dark-mode input:focus,
+.dark-mode textarea:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+}
+
+.dark-mode .send-button {
+    background-color: #3b82f6;
+    color: white;
+    border: 1px solid #2563eb;
+    transition: all 0.2s ease;
+}
+
+.dark-mode .send-button:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .send-button:active {
+    transform: translateY(0);
+}
+
+.dark-mode .copy-button {
+    background-color: #374151;
+    color: #e5e7eb;
+    border: 1px solid #4b5563;
+    transition: all 0.2s ease;
+}
+
+.dark-mode .copy-button:hover {
+    background-color: #4b5563;
+    color: #f3f4f6;
+    transform: translateY(-1px);
+}
+
+.dark-mode .copy-button:active {
+    transform: translateY(0);
+}
+
+/* Melhorando o contraste do botão de alternar tema */
+.dark-mode #theme-toggle {
+    color: #e5e7eb;
+    background-color: #1f2937;
+    border: 1px solid #374151;
+}
+
+.dark-mode #theme-toggle:hover {
+    background-color: #374151;
+}
+
+/* Melhorando o contraste das mensagens de notificação */
+.dark-mode .notification {
+    background-color: #1f2937;
+    border: 1px solid #374151;
+    color: #f9fafb;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Melhorando o contraste do placeholder nos inputs */
+.dark-mode ::placeholder {
+    color: #9ca3af;
+    opacity: 1;
+}
+
+.dark-mode :-ms-input-placeholder {
+    color: #9ca3af;
+}
+
+.dark-mode ::-ms-input-placeholder {
+    color: #9ca3af;
 }
 
 #app {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    max-width: 100%;
+    margin: 0 auto;
 }
 
 .chat-container {
-    flex: 1 1 0%;
+    flex: 1;
     overflow-y: auto;
-    padding: 1rem;
-    background-color: #f7f7f8;
-    padding-bottom: 8rem;
+    padding: 1rem 0;
+    background-color: var(--bg-color);
+    scroll-behavior: smooth;
+    position: relative;
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    padding-bottom: 120px;
+}
+
+/* Estilização da barra de rolagem */
+.chat-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+    background-color: #c7d2fe;
+    border-radius: 20px;
+}
+
+.chat-container::-webkit-scrollbar-thumb:hover {
+    background-color: #a5b4fc;
 }
 
 .message {
-    max-width: 48rem;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    max-width: 768px;
     width: 100%;
+    margin: 0 auto 1rem;
+    padding: 0.75rem 1rem;
     display: flex;
     gap: 1rem;
+    position: relative;
+    transition: var(--transition);
+}
+
+.message:hover {
+    background-color: rgba(0, 0, 0, 0.01);
 }
 
 .message-content {
-    max-width: 48rem;
+    max-width: 100%;
     width: 100%;
+    padding-right: 1.5rem;
 }
 
 .user-message {
-    background-color: white;
-    border-bottom: 1px solid #e5e7eb;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+    background-color: rgba(99, 102, 241, 0.05);
+    border-left: 3px solid var(--primary-color);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    margin-left: 0;
+    margin-right: auto;
 }
 
 .bot-message {
-    background-color: #f9fafb;
-    border-bottom: 1px solid #f3f4f6;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+    background-color: var(--card-bg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    margin: 0.5rem auto 0.5rem 0;
+    max-width: 90%;
+    width: fit-content;
+    padding: 1rem 1.25rem;
+    position: relative;
+}
+
+/* Melhoria para mensagens longas */
+.message-text {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 .avatar {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 9999px;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -60,14 +552,35 @@ body {
     color: white;
     font-weight: 600;
     font-size: 0.875rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .user-avatar {
-    background-color: #3b82f6;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
 }
 
 .bot-avatar {
-    background-color: #10b981;
+    background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+    padding: 2px;
+}
+
+.bot-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .message-text {
@@ -168,61 +681,209 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: white;
-    border-top: 1px solid #e5e7eb;
+    background-color: var(--card-bg);
+    border-top: 1px solid var(--border-color);
     padding: 1rem;
-    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px);
+    z-index: 10;
 }
 
 .input-wrapper {
-    max-width: 48rem;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 768px;
+    width: 100%;
+    margin: 0 auto;
     display: flex;
     align-items: flex-end;
-    gap: 0.5rem;
+    gap: 0.75rem;
 }
 
 #user-input {
     flex: 1 1 0%;
-    border: 1px solid #d1d5db;
-    border-radius: 0.5rem;
-    padding: 0.75rem 1rem;
-    min-height: 44px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 0.875rem 1.25rem;
+    min-height: 56px;
     max-height: 200px;
     resize: none;
     font-family: inherit;
     font-size: 1rem;
     line-height: 1.5;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    color: var(--text-primary);
+    background-color: var(--card-bg);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    scrollbar-width: thin;
+    scrollbar-color: #c7d2fe transparent;
+font-size: 1rem;
+line-height: 1.5;
+color: var(--text-primary);
+background-color: var(--card-bg);
+box-shadow: var(--shadow-sm);
+transition: var(--transition);
+scrollbar-width: thin;
+scrollbar-color: #c7d2fe transparent;
 }
 
 #user-input:focus {
-    outline: none;
-    border-color: transparent;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+outline: none;
+border-color: var(--primary-color);
+box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+#user-input::placeholder {
+color: var(--text-secondary);
+opacity: 0.7;
+}
+
+/* Estilização da barra de rolagem do textarea */
+#user-input::-webkit-scrollbar {
+width: 6px;
+}
+
+#user-input::-webkit-scrollbar-track {
+background: transparent;
+border-radius: 3px;
+}
+
+#user-input::-webkit-scrollbar-thumb {
+background-color: #c7d2fe;
+border-radius: 3px;
+}
+
+#user-input::-webkit-scrollbar-thumb:hover {
+background-color: #a5b4fc;
+}
+
+.typing-indicator {
+display: flex;
+align-items: center;
+gap: 8px;
+padding: 12px 20px;
+background-color: var(--card-bg);
+border-radius: var(--radius-lg);
+width: fit-content;
+margin: 4px 0 8px;
+opacity: 0;
+transform: translateY(10px);
+transition: opacity 0.3s ease, transform 0.3s ease;
+box-shadow: var(--shadow-sm);
+border: 1px solid var(--border-color);
+}
+
+.typing-indicator.visible {
+opacity: 1;
+transform: translateY(0);
+}
+
+.typing-dot {
+width: 10px;
+height: 10px;
+background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+border-radius: 50%;
+display: inline-block;
+animation: typingAnimation 1.4s infinite ease-in-out;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.typing-dot:nth-child(1) { animation-delay: 0s; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingAnimation {
+0%, 60%, 100% { 
+transform: translateY(0) scale(1);
+opacity: 0.6;
+}
+30% { 
+transform: translateY(-5px) scale(1.1);
+opacity: 1;
+}
 }
 
 .send-button {
-    background-color: #10b981;
-    color: white;
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-    min-height: 44px;
-    min-width: 44px;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s ease-in-out;
+background: var(--primary-color);
+color: white;
+border-radius: var(--radius-lg);
+width: 48px;
+height: 48px;
+border: none;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: var(--transition);
+flex-shrink: 0;
+box-shadow: 0 2px 5px rgba(99, 102, 241, 0.3);
 }
 
 .send-button:hover {
-    background-color: #059669;
+background: var(--primary-hover);
+transform: translateY(-1px);
+box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+}
+
+.send-button:active {
+transform: translateY(0);
+box-shadow: 0 2px 5px rgba(99, 102, 241, 0.3);
 }
 
 .send-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+background: #c7d2fe;
+cursor: not-allowed;
+transform: none;
+box-shadow: none;
+opacity: 0.7;
+}
+
+.send-button i {
+font-size: 1.25rem;
+transition: transform 0.2s ease;
+}
+
+.send-button:not(:disabled):hover i {
+transform: translateX(2px);
+}
+
+/* Disable input while loading */
+.input-disabled #user-input,
+.input-disabled .send-button {
+opacity: 0.7;
+pointer-events: none;
+}
+
+.input-disabled .send-button {
+background: #c7d2fe;
+}
+
+/* Efeito de carregamento no botão */
+.send-button.loading i {
+animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+from { transform: rotate(0deg); }
+to { transform: rotate(360deg); }
+}
+
+/* Melhorias de responsividade */
+@media (max-width: 768px) {
+.message {
+padding: 0.5rem 0.75rem;
+margin-bottom: 0.5rem;
+}
+    
+.bot-message {
+max-width: 100%;
+}
+    
+#user-input {
+padding: 0.75rem 1rem;
+min-height: 48px;
+}
+    
+.send-button {
+width: 44px;
+height: 44px;
+}
 }
