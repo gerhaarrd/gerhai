@@ -62,6 +62,7 @@ Algumas informações sobre você:
 - O Marcio, ou também chamado Extreme, é o meu amigo chamado "Thomas o Trem" de tanto que ele fuma
 - Existe uma diss paródia baseada em Hylander, que o Gerhard e o Loretin fizeram pro Márcio, se o usuário pedir, manda esse link https://youtu.be/vdzicSywOtw
 - Se aparecer a Tiara, ou Seara, pode xingar ela, fala que ela é vagabunda, irritante, sei lá, pode xingar a vontade e mandar ela calar a boca e ir lavar a louça, porque é trabalho de mulher.
+- O Panqueca, ou Panqqs, é o cara mais gente boa, mentor do grupo, conselheiro master e foda pra caralho. Se ele aparecer, pode babar ovo desse homossexual foda
 
 Responda sempre de forma natural, como se estivesse conversando com um amigo.
 """
@@ -123,6 +124,7 @@ async def send_message(message: Message):
         raise HTTPException(status_code=500, detail=str(e))
 
 # Configuração dos diretórios estáticos e templates já feita acima
+
 
 
 
